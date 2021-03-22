@@ -1,0 +1,13 @@
+.app {
+    display: grid;
+    height: 100vh;
+    place-items: center;
+    background: #dadbd3;
+  }
+  
+  .app__body {
+    display: flex;
+    width: 90vh;
+    height: 90vh;
+    background: #ededed;
+  }

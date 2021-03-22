@@ -1,0 +1,50 @@
+.header__wrap {
+  width: 100%;
+}
+
+.head__split {
+  max-width: 1010px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  height: 48px;
+  margin: 0 auto;
+  background: #5682a3;
+  color: white;
+}
+
+.head__logo_wrap {
+  display: flex;
+  align-items: center;
+  width: 31%;
+}
+
+.head__dehazeIcon {
+  padding-left: 10px;
+}
+
+.head__logo {
+  margin-left: 30px;
+  font-size: 14px;
+}
+
+.head__main_wrap {
+  /* float: left; */
+  display: flex;
+  justify-content: flex-end;
+  width: 69%;
+  white-space: nowrap;
+}
+
+.head__main__iconGroup {
+  display: flex;
+}
+
+.head__main__searchIcon {
+  margin-right: 10px;
+  color: white;
+}
+
+.head__main__moreVertIcon {
+  color: white;
+}
