@@ -15,8 +15,6 @@ export function AuthProvider({ children }) {
 
   async function signin(email, password) {
     const responese = await LoginWithEmailAndPassword(email, password);
-    console.log("responese.data.loggedin ****** ", responese.data.loggedin);
-    // login state = suucessfully
     if (responese.data.loggedin === true) {
       setCurrentUser(responese.data);
       return responese;
@@ -27,7 +25,6 @@ export function AuthProvider({ children }) {
   async function getUserCredentialWithSessionCooki() {
     const responese = await CheckLoginWithSessionCooki();
     if (responese.data.loggedin === true) {
-      // login successfully
       setCurrentUser(responese.data);
     }
     return responese;

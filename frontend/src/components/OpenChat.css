@@ -28,33 +28,56 @@
 
 .chat__body {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   overflow: auto;
   padding: 10px;
   border-bottom: 2px solid #dadbd3;
 }
 
-.chat__message {
+.chat__container {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+
+.message {
   position: relative;
-  width: fit-content;
-  margin-bottom: 20px;
   padding: 10px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 15px;
   background: #f6f6f6;
   font-size: 16px;
   margin-top: 10px;
   border-radius: 50px;
 }
 
+.receive__message {
+  align-self: flex-start;
+}
+
+.send__message {
+  background: #1976d2;
+  color: #f6f6f6;
+  align-self: flex-end;
+}
+
 .chat__name {
   position: absolute;
   top: -18px;
+  right: 10px;
   font-size: 13px;
   color: #949ba0;
 }
 
 .chat__timestap {
   margin-left: 10px;
+  align-self: center;
   font-size: x-small;
-  color: #949ba0;
+  /* color: #949ba0; */
 }
 
 .chat__footer {

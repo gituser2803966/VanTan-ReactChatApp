@@ -1,0 +1,17 @@
+.contact {
+  display: flex;
+  background: #f6f6f6;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 1px solid #dadbd3;
+}
+
+.contact__info {
+  margin-left: 10px;
+}
+
+.contact__name {
+  font-size: 18px;
+  font-weight: bold;
+}

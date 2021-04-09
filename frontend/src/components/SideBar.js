@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./SideBar.css";
 import { useAuth } from "../contexts/AuthContext";
-import Conversation from "./Conversation";
+import SideBarContent from "./SideBarContent";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SearchIcon from "@material-ui/icons/Search";
 import { Avatar, IconButton } from "@material-ui/core";
@@ -71,6 +71,10 @@ function SideBar() {
       color: theme.palette.getContrastText(deepPurple[500]),
       backgroundColor: deepPurple[500],
     },
+    tab: {
+      flexGrow: 1,
+      maxWidth: 500,
+    },
   }));
 
   //
@@ -116,13 +120,6 @@ function SideBar() {
   const classes = useStyles();
 
   //
-  useEffect(() => {
-    async function getUserLoggedin() {
-      return await getUserCredentialWithSessionCooki();
-    }
-
-    getUserLoggedin();
-  }, []);
 
   return (
     <div className="sidebar">
@@ -135,8 +132,6 @@ function SideBar() {
         {/*  */}
         <Dialog
           onClose={handleClose}
-          fullWidth
-          maxWidth="xs"
           aria-labelledby="customized-dialog-title"
           open={isShowDialog}
         >
@@ -154,7 +149,7 @@ function SideBar() {
               spacing={5}
             >
               <Avatar className={classes.largeAvatar}>OP</Avatar>
-              <Box p="1rem">{currentUser && currentUser.user.email}</Box>
+              <Box p={1}>{currentUser && currentUser.user.email}</Box>
             </Box>
           </DialogTitle>
           <DialogContent dividers>
@@ -219,9 +214,7 @@ function SideBar() {
         </div>
       </div>
       <div className="sidebar__conversation">
-        <h3>Conversations</h3>
-        <Conversation />
-        <Conversation />
+        <SideBarContent />
       </div>
     </div>
   );

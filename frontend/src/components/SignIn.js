@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
-  const { signin, getUserCredentialWithSessionCooki } = useAuth();
+  const { signin } = useAuth();
   const history = useHistory();
   const classes = useStyles();
   // const { currentUser } = useAuth();
@@ -97,7 +97,7 @@ export default function SignIn() {
     signin(email, password)
       .then((res) => {
         setLoading(false);
-        history.push("/chat/me");
+        history.push("/chat");
       })
       .catch((error) => {
         setLoading(false);
@@ -124,30 +124,40 @@ export default function SignIn() {
       });
   }
 
+  // useEffect(() => {
+  //   getUserCredentialWithSessionCooki()
+  //     .then(() => {
+  //       history.push("/chat/me");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
+
   //
-  useEffect(() => {
-    getUserCredentialWithSessionCooki()
-      .then((respone) => {
-        console.log(respone);
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log("error.response.data COOKIES****", error.response.data);
-          // setError("");
-          // console.log("error.response.status ****", error.response.status);
-          // console.log("error.response.headers ****", error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log("error.request COOKIES****", error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error COOKIES", error.message);
-        }
-        console.log("error.config COOKIES**** ", error.config);
-      });
-  }, []);
+  // useEffect(() => {
+  //   getUserCredentialWithSessionCooki()
+  //     .then((respone) => {
+  //       console.log(respone);
+  //     })
+  //     .catch((error) => {
+  //       if (error.response) {
+  //         console.log("error.response.data COOKIES****", error.response.data);
+  //         // setError("");
+  //         // console.log("error.response.status ****", error.response.status);
+  //         // console.log("error.response.headers ****", error.response.headers);
+  //       } else if (error.request) {
+  //         // The request was made but no response was received
+  //         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+  //         // http.ClientRequest in node.js
+  //         console.log("error.request COOKIES****", error.request);
+  //       } else {
+  //         // Something happened in setting up the request that triggered an Error
+  //         console.log("Error COOKIES", error.message);
+  //       }
+  //       console.log("error.config COOKIES**** ", error.config);
+  //     });
+  // }, []);
 
   return (
     <Container component="main" maxWidth="xs">

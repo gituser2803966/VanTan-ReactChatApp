@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useConversation } from "../contexts/ConversationContext";
 import "./Dashboard.css";
 import SideBar from "./SideBar";
-import Chat from "./Chat";
+import OpenChat from "./OpenChat";
 
 function Dashboard() {
+  const { selectedConversation } = useConversation();
   return (
     <div className="app">
       <div className="app__body">
         <SideBar />
-        <Chat />
+        {selectedConversation && <OpenChat />}
       </div>
     </div>
   );
