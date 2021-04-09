@@ -13,6 +13,7 @@ function OpenChat() {
   // const { username, _id } = contact;
   const { currentUser } = useAuth();
   const [test, setTest] = useState();
+  // 12345645465455
   const { sendMessage, selectedConversation } = useConversation();
   const [text, setText] = useState("");
   // const lastMessageRef = useRef();
