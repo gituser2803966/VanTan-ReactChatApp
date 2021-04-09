@@ -12,6 +12,7 @@ import { Avatar, IconButton } from "@material-ui/core";
 function OpenChat() {
   // const { username, _id } = contact;
   const { currentUser } = useAuth();
+  const [test, setTest] = useState();
   const { sendMessage, selectedConversation } = useConversation();
   const [text, setText] = useState("");
   // const lastMessageRef = useRef();
