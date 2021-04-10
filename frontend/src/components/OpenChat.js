@@ -94,6 +94,7 @@ function OpenChat() {
         <InsertEmoticonIcon />
         <form className="chat__form" onSubmit={(e) => handleSubmit(e)}>
           <input
+            multiple
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}

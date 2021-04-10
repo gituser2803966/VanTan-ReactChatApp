@@ -37,17 +37,28 @@ function Conversation() {
     },
     selectedListItem: {
       "&$selected": {
-        backgroundColor: "#4791db",
+        backgroundColor: "#1976d2",
+        color: "#fff",
         "&:hover": {
-          backgroundColor: "#64b5f6",
+          backgroundColor: "#1976d2",
         },
       },
     },
-    selected: {},
+    selected: {
+      backgroundColor: "#4791db",
+    },
     headerConversations: {
       display: "flex",
+      padding: 10,
       justifyContent: "space-between",
       alignItems: "center",
+    },
+    newConversationButton: {
+      background: "#1976d2",
+      color: "#ffffff",
+      "&:hover": {
+        background: "#1976d2",
+      },
     },
   }));
   const classes = useStyles();
@@ -63,7 +74,8 @@ function Conversation() {
         <Box component="div">
           <Button
             variant="contained"
-            color="primary"
+            className={classes.newConversationButton}
+            // color="primary"
             startIcon={<AddIcon />}
             onClick={handleOpen}
           >
@@ -77,6 +89,7 @@ function Conversation() {
             const labelId = `checkbox-list-secondary-label-${index}`;
             return (
               <ListItem
+                // disableGutters
                 key={index}
                 classes={{
                   root: classes.selectedListItem,

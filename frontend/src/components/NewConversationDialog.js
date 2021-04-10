@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
+import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 import Checkbox from "@material-ui/core/Checkbox";
 import List from "@material-ui/core/List";
@@ -26,6 +27,7 @@ function NewConversationDialog(props) {
   //
   const handleCheckBoxChange = (contactId, index) => () => {
     const currentIndex = checked.indexOf(index);
+    console.log("currentIndex: ", currentIndex);
     const newChecked = [...checked];
 
     if (currentIndex === -1) {
@@ -60,7 +62,21 @@ function NewConversationDialog(props) {
   };
 
   const useStyles = makeStyles((theme) => ({
-    root: {},
+    box: {
+      padding: 5,
+    },
+    list__item: {
+      display: "flex",
+      justifyContent: "center",
+    },
+    create__btn: {
+      padding: 8,
+      background: "#1976d2",
+      color: "#fff",
+      "&:hover": {
+        backgroundColor: "#1976d2",
+      },
+    },
   }));
 
   const classes = useStyles();
@@ -88,20 +104,40 @@ function NewConversationDialog(props) {
                 <Checkbox
                   edge="end"
                   onChange={handleCheckBoxChange(contact._id, index)}
-                  checked={checked.indexOf(index) !== -1}
+                  checked={selectedContactIds.includes(contact._id)}
                   inputProps={{ "aria-labelledby": labelId }}
                 />
               </ListItemSecondaryAction>
             </ListItem>
           );
         })}
-        <ListItem autoFocus button onClick={() => handleListItemClick()}>
-          <ListItemAvatar>
+        <ListItem
+          className={classes.list__item}
+          // autoFocus
+          button
+          onClick={() => handleListItemClick()}
+        >
+          {/* <ListItemAvatar>
             <Avatar>
               <AddIcon />
             </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Tạo cuộc trò chuyện" />
+          </ListItemAvatar> */}
+          <Box
+            display={selectedContactIds.length > 0 ? "flex" : "none"}
+            className={classes.box}
+            displayPrint="block"
+          >
+            <Button
+              fullWidth
+              className={classes.create__btn}
+              variant="contained"
+              size="small"
+              // disabled={true}
+              // color="primary"
+            >
+              tạo cuộc trò chuyện
+            </Button>
+          </Box>
         </ListItem>
       </List>
     </Dialog>
