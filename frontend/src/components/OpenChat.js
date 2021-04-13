@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useConversation } from "../contexts/ConversationContext";
-import { useAuth } from "../contexts/AuthContext";
 import "./OpenChat.css";
 import CallIcon from "@material-ui/icons/Call";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
@@ -10,13 +9,8 @@ import TelegramIcon from "@material-ui/icons/Telegram";
 import { Avatar, IconButton } from "@material-ui/core";
 
 function OpenChat() {
-  // const { username, _id } = contact;
-  const { currentUser } = useAuth();
-  const [test, setTest] = useState();
-  // 12345645465455
   const { sendMessage, selectedConversation } = useConversation();
   const [text, setText] = useState("");
-  // const lastMessageRef = useRef();
 
   const setRef = useCallback((node) => {
     if (node) {

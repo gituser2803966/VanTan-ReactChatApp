@@ -98,12 +98,6 @@ export function ConversationProvider({ children, currentUser }) {
     sendMessage,
   };
 
-  const ReceiveMessage = useCallback(({ recipients, sender, text }) => {
-    console.log("recipients: ", recipients);
-    console.log("sender: ", sender);
-    console.log("text: ", text);
-  });
-
   useEffect(() => {
     if (socket == null) {
       console.log("socket nullllllllllllll");

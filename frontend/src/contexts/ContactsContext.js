@@ -7,11 +7,9 @@ export function useContacts() {
   return useContext(ContactsContext);
 }
 
-export function ContactsProvider({ children, currentUser }) {
+export function ContactsProvider({ children }) {
   const [contacts, setContacts] = useLocalStorage("contacts", []);
   const [selectedContact, setSelectedContact] = useState();
-
-  const { _id, email } = currentUser.user;
 
   function addContact(user) {
     const _id = user._id;

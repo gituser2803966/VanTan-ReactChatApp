@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useConversation } from "../contexts/ConversationContext";
 import "./Dashboard.css";
 import SideBar from "./SideBar";

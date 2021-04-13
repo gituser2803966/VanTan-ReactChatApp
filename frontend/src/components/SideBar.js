@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./SideBar.css";
 import { useAuth } from "../contexts/AuthContext";
 import SideBarContent from "./SideBarContent";
@@ -31,7 +31,7 @@ function SideBar() {
   const [isShowDialog, setIsShowDialog] = React.useState(false);
   const [checked, setChecked] = React.useState(["wifi"]);
 
-  const { currentUser, getUserCredentialWithSessionCooki } = useAuth();
+  const { currentUser } = useAuth();
   // console.log("currentUser SIDE BAR ***", currentUser);
 
   const handleToggle = (value) => () => {

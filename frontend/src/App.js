@@ -1,7 +1,7 @@
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import PrivateRoute from "./components/PrivateRoute";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 
