@@ -8,6 +8,7 @@
 .app__body {
   display: flex;
   height: 90vh;
+  max-width: 100%;
   background: #ededed;
 }
 
