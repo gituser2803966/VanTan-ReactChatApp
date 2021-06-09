@@ -11,15 +11,12 @@ import AddIcon from "@material-ui/icons/Add";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import NewConversationDialog from "./NewConversationDialog";
-import { useConversation } from "../contexts/ConversationContext";
-
-const emails = ["username@gmail.com", "user02@gmail.com"];
+import { useConversation } from "../contexts/ConversationsProvider";
 
 function Conversation() {
   const { conversations, selectConversationIndex } = useConversation();
 
   const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(emails[1]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -27,7 +24,6 @@ function Conversation() {
 
   const handleClose = (value) => {
     setOpen(false);
-    setSelectedValue(value);
   };
 
   const useStyles = makeStyles((theme) => ({
@@ -48,7 +44,7 @@ function Conversation() {
     },
     headerConversations: {
       display: "flex",
-      padding: 10,
+      // padding: 10,
       justifyContent: "space-between",
       alignItems: "center",
     },
@@ -65,7 +61,6 @@ function Conversation() {
     <div>
       <div className={classes.headerConversations}>
         <NewConversationDialog
-          selectedValue={selectedValue}
           open={open}
           onClose={handleClose}
         />
@@ -78,7 +73,7 @@ function Conversation() {
             startIcon={<AddIcon />}
             onClick={handleOpen}
           >
-            New Chat
+            New
           </Button>
         </Box>
       </div>
@@ -114,12 +109,6 @@ function Conversation() {
                 />
                 <ListItemSecondaryAction>
                   time
-                  {/* <Checkbox
-                edge="end"
-                onChange={handleToggle(index)}
-                checked={checked.indexOf(index) !== -1}
-                inputProps={{ 'aria-labelledby': labelId }}
-              /> */}
                 </ListItemSecondaryAction>
               </ListItem>
             );

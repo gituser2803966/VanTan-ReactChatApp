@@ -1,6 +1,9 @@
+import * as dotenv from 'dotenv';
 import mongoose from "mongoose";
-const CONNECTION_URL =
-  "mongodb+srv://tan123:MLPrXK0G5sYXh7Uh@cluster0.qfjwb.mongodb.net/ReactChatApp?retryWrites=true&w=majority";
+
+dotenv.config();
+
+const CONNECTION_URL = process.env.MONGOOSE_CONNECTION_URL;
 export default mongoose.connect(
   CONNECTION_URL,
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -12,4 +15,3 @@ export default mongoose.connect(
     }
   }
 );
-// module.exports = db

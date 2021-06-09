@@ -1,6 +1,10 @@
 import User from "../models/user.model.js";
+import * as dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import { generateToken } from "../helper/jwt.helper.js";
+
+dotenv.config();
+
 const debug = console.log.bind(console);
 const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "1d";
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
@@ -13,27 +17,50 @@ const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || "3650d";
 const refreshTokenSecret =
   process.env.REFRESH_TOKEN_SECRET || "refresh-token-secret-example-@1234";
 
+// upload profile
+// export const UploadProfile = (req,res) =>{
+//   console.log('req.file: ',req.file)
+//   return true;
+// }
+
+//get all user
+export const GetAllUser = (req,res) =>{
+  User.find({},(error,docs)=>{
+    if(error){
+      return res.status(404).send({
+        error,
+        success: false,
+        message: 'NOT FOUND DOC'
+      })
+    }else{
+      return res.status(200).send({
+        users: docs,
+        success:true,
+        message: 'OK',
+      })
+    }
+  })
+}
+
 // check loggedIn with session cooki
-export const LoginWithSessionCooki = (req, res) => {
+export const LoginWithSessionCookie = (req, res) => {
   if (req.session.user) {
     return res.status(200).json({
-      loggedin: true,
+      logged: true,
       message: "đã đăng nhập rồi",
       user: req.session.user,
     });
   } else {
     return res.status(400).json({
-      loggedin: false,
+      logged: false,
       message: "chưa đăng nhập",
     });
   }
 };
 
-export const login = async (req, res) => {
+// login
+export const Login = async (req, res) => {
   try {
-    // req.session.VANTAN = "test_session_value";
-    // debug(`test session`);
-    // kiem tra email cua nguoi dung
     const { email, password } = req.body;
     // console.log("co REQUEST TOI ...");
     const user = await User.findOne({ email });
@@ -41,7 +68,7 @@ export const login = async (req, res) => {
     if (!user) {
       // email không đúng
       return res.status(400).send({
-        loggedin: false,
+        logged: false,
         error: "Email does not exist",
         message: "email không tồn tại",
       });
@@ -50,60 +77,91 @@ export const login = async (req, res) => {
     if (!isPasswordMatch) {
       //nếu password không đúng
       return res.status(400).send({
-        loggedin: false,
+        logged: false,
         error: "Password does not exist",
         message: "Mật khẩu không đúng",
       });
     }
-    // console.log("user info ", user);
-
+    // user data
     const userData = {
       _id: user._id,
       email,
     };
+
     // tạo access token và refesh token
     const accessToken = await generateToken(
       userData,
       accessTokenSecret,
       accessTokenLife
     );
-    // debug(`Thực hiện tạo mã Refresh Token, [thời gian sống 10 năm] =))`);
     const refreshToken = await generateToken(
       userData,
       refreshTokenSecret,
       refreshTokenLife
     );
-    // debug(`Gửi Token và Refresh Token về cho client...`);
+
+    // lưu thông tin cookie vào tab trên browser
     req.session.user = user;
     return res.status(200).json({
-      loggedin: true,
+      logged: true,
       accessToken,
       refreshToken,
       user,
-      message: "đăng nhập thành công ...",
+      message: "you are logged",
     });
   } catch (error) {
     return res.status(500).json(error);
   }
 };
+// logout
+export const Logout = async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.send({ error: "Logout error" });
+    }
+    req.session = null;
+    res.clearCookie(process.env.SESSION_NAME, { path: "/" });
+    return res.send({
+      logged: false,
+      message: "you are logout",
+    });
+  });
+};
+
 // register
-export const register = async (req, res) => {
-  try {
-    const userData = {
-      email: req.body.email,
-      password: req.body.password,
-    };
-    const isUserExist = await User.findOne({ email: userData.email }).exec();
-    if (isUserExist) {
-      // neu email da ton tai
-      res.status(400).send({ error: "Email đã tồn tại" });
+export const Register = (req, res) => {
+  const { firstName, lastName, email, password } = req.body;
+
+  const userData = {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password,
+  };
+  User.findOne({ email }, (error, userDoc) => {
+    if (userDoc) {
+      return res.status(400).send({
+        message: "Email đã tồn tại",
+        success: false,
+        error,
+      });
     } else {
       const user = new User(userData);
-      await user.save();
-      // const token = await user.generateAuthToken();
-      res.status(200).send({ message: "Đăng kí thành công", user });
+      user.save((err, doc) => {
+        if (err) {
+          console.log("err ****** :", err);
+          return res.status(400).send({
+            success: false, message: "Email không hợp lệ",
+            error:err,
+          })
+        } else {
+          req.session.user = doc;
+          // const token = await user.generateAuthToken();
+          return res
+            .status(200)
+            .send({ success: true, message: "Đăng kí thành công", user: doc });
+        }
+      });
     }
-  } catch (error) {
-    res.status(400).send(error);
-  }
+  });
 };

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useConversation } from "../contexts/ConversationContext";
+import { useConversation } from "../contexts/ConversationsProvider";
 import "./OpenChat.css";
 import CallIcon from "@material-ui/icons/Call";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
@@ -20,6 +20,9 @@ function OpenChat() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(text === ''){
+      return
+    }
     sendMessage(
       selectedConversation.recipients.map((r) => r._id),
       text
@@ -32,10 +35,7 @@ function OpenChat() {
       <div className="chat__header">
         <div className="chat__headerLeft">
           <Avatar />
-          <div className="chat__headerInfo">
-            <div className="chat__headerRoomName">username</div>
-            <div className="chat__headerLastSeen">last seen: 30 minus</div>
-          </div>
+            <span className="chat__headerRoomName">username</span>
         </div>
         <div className="chat__headerRight">
           <IconButton>
@@ -47,7 +47,6 @@ function OpenChat() {
         </div>
       </div>
       <div className="chat__body">
-        <div className="chat__container">
           {selectedConversation.messages.map((message, index) => {
             const lastMessage =
               selectedConversation.messages.length - 1 === index;
@@ -56,32 +55,18 @@ function OpenChat() {
               <div
                 key={index}
                 ref={lastMessage ? setRef : null}
-                className={`message ${
-                  message.fromMe ? "send__message" : "receive__message"
+                className={`message message_${index} ${
+                  message.fromMe ? `send__message send__message_${index}` : `receive__message receive__message${index}`
                 }`}
               >
                 <span className="chat__name">
                   {message.fromMe ? "You" : message.senderName}
                 </span>
-                <div
-                  className="chat__content"
-                  // className={`chat__content ${
-                  //   message.fromMe
-                  //     ? "chat__content__bg__primary"
-                  //     : "chat__content__non_bg"
-                  // }`}
-                >
-                  {message.text}
-                </div>
+                <div className="message__text">{message.text}</div>
                 <span className="chat__timestap">9:40 PM</span>
               </div>
             );
           })}
-          {/* <p className="chat__message">
-          <span className="chat__name">Pham Van Tan</span>this is a message
-          <span className="chat__timestap">9:40 PM</span>
-        </p> */}
-        </div>
       </div>
       {/* chat form */}
       <div className="chat__footer">
@@ -94,7 +79,9 @@ function OpenChat() {
             onChange={(e) => setText(e.target.value)}
           />
           <button type="submit" className="btn__submit">
-            <TelegramIcon />
+           {
+             text !== ''? <TelegramIcon /> : ''
+           }
           </button>
         </form>
         <MicNoneIcon />

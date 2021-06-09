@@ -4,6 +4,16 @@ import bcrypt from "bcrypt";
 // import { generateToken } from "../helper/jwt.helper.js";
 
 const userSchema = new mongoose.Schema({
+    firstName:{
+      type: String,
+      required: true,
+      trim: true,
+    },
+    lastName:{
+      type: String,
+      required: true,
+      trim: true,
+    },
   email: {
     type: String,
     required: true,
@@ -20,10 +30,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     minLength: 7,
   },
-  // token: {
-  //   type: String,
-  //   required: true,
-  // },
+  createAt: {
+    type: Date,
+    default: Date.now,
+  }
 });
 
 userSchema.pre("save", async function (next) {

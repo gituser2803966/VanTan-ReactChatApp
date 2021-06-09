@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 import "./Contact.css";
-import { useContacts } from "../contexts/ContactsContext";
+import { useContacts } from "../contexts/ContactsProvider";
 import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
+import { useAuth } from "../contexts/AuthProvider";
+import { useUsersOnline } from '../contexts/UsersOnlineProvider';
 
 function Contact() {
-  const { contacts, hanldeSelectContact } = useContacts();
-  const [selectedIndex, setSelectedIndex] = useState();
-
-  function handleSelectContact(contact, index) {
-    setSelectedIndex(index);
-    hanldeSelectContact(contact);
-  }
+  const { contacts } = useContacts();
+  const { usersOnline } = useUsersOnline();
+  console.log('usersOnline in Contact.js file: ',usersOnline)
+  const {
+    authState: { user },
+  } = useAuth();
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,31 +22,33 @@ function Contact() {
   const classes = useStyles();
 
   return (
-    <List dense disablePadding className={classes.root}>
-      {contacts.map((contact, index) => {
-        const labelId = `checkbox-list-secondary-label-${index}`;
+    <div className="contact__container">
+      {contacts?contacts.map((contact, index) => {
+        const userOnline = usersOnline.find(u=>u._id === contact._id);
         return (
-          <ListItem
-            divider
-            key={index}
-            button
-            selected={selectedIndex === index}
-            onClick={() => handleSelectContact(contact, index)}
-          >
-            <ListItemAvatar>
-              <Avatar
-                alt={`Avatar n°${index + 1}`}
-                // src={`/static/images/avatar/${value + 1}.jpg`}
+          <div className="contact__list" key={index}>
+            <div className="contact__icon">
+              <img
+                className="contact__image"
+                src="https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png"
               />
-            </ListItemAvatar>
-            <ListItemText id={labelId} primary={contact.username} />
-          </ListItem>
+               {
+                userOnline && userOnline.status === true ?  
+                <div className="online__status__circle"></div>
+                 :
+                <div className="offline__status__circle"></div>
+              } 
+            </div>
+            <div className="contact__username">
+              <span>{contact.firstName+" "+contact.lastName}</span>
+            </div>
+          </div>
         );
-      })}
-    </List>
+      }) :
+        <h4>No contact found</h4>
+      }
+    </div>
   );
-
-  // </div>
 }
 
 export default Contact;

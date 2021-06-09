@@ -1,6 +1,9 @@
 .chat {
-  flex: 0.65;
   display: flex;
+  height: 100vh;
+  max-height: 100vh;
+  /* overflow-y: scroll; */
+  position: relative;
   flex-direction: column;
 }
 
@@ -9,7 +12,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #dadbd3;
-  padding: 10px;
+  padding: 5px;
 }
 
 .chat__headerLeft {
@@ -17,50 +20,45 @@
   align-items: center;
 }
 
-.chat__headerInfo {
-  margin-left: 15px;
-}
 
 .chat__headerRoomName {
-  font-size: 18px;
+  font-size: 16px;
+  margin-left: 10px;
   font-weight: bold;
 }
 
 .chat__body {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
-  overflow: auto;
+  overflow-y: scroll;
   padding: 10px;
   border-bottom: 2px solid #dadbd3;
 }
 
-.chat__container {
-  flex: 1;
-  display: flex;
-  overflow-wrap: anywhere;
-  justify-content: flex-end;
-  flex-direction: column;
-}
-
 .message {
-  position: relative;
-  padding: 10px;
+  /* position: relative; */
+  padding: 8px;
   display: flex;
   align-items: center;
-  width: fit-content;
-  margin-bottom: 15px;
+  max-width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
   background: #f6f6f6;
   font-size: 16px;
-  margin-top: 10px;
-  border-radius: 20px;
+
+  border-radius: 15px;
 }
 
 .receive__message {
   align-self: flex-start;
+  position: relative;
+  background:#fff;
+  color: #0c0b0b;
 }
 
 .send__message {
+  position: relative;
   background: #1976d2;
   color: #f6f6f6;
   align-self: flex-end;
@@ -68,10 +66,9 @@
 
 .chat__name {
   position: absolute;
-  width: max-content;
-  top: -18px;
-  left: 10px;
-  font-size: 13px;
+  top: -16px;
+  left: 5px;
+  font-size: 12px;
   color: #949ba0;
 }
 
@@ -95,11 +92,11 @@
 .chat__footer > form {
   display: flex;
   margin-left: 15px;
-  flex: 1;
+  width: 100%;
 }
 
 .chat__footer > form > input {
-  flex: 1;
+  width: 100%;
   border: none;
   border-radius: 25px;
   padding: 10px;

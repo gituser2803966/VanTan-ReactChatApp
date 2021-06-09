@@ -1,17 +1,56 @@
-.contact {
+.contact__container {
   display: flex;
-  background: #f6f6f6;
+  flex-direction: column;
+}
+
+.contact__list {
+  display: flex;
   align-items: center;
+  padding: 8px;
   cursor: pointer;
-  padding: 10px;
-  border-bottom: 1px solid #dadbd3;
+  border-bottom: 1px solid white;
 }
 
-.contact__info {
+.contact__list:hover {
+  background-color: royalblue;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.contact__icon {
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+.contact__image {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+
+.offline__status__circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgb(112, 112, 112);
+  border: 2px solid white;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}
+
+.online__status__circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgb(54, 187, 14);
+  border: 2px solid white;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}
+
+.contact__username {
   margin-left: 10px;
-}
-
-.contact__name {
-  font-size: 18px;
-  font-weight: bold;
 }

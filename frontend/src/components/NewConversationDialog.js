@@ -12,8 +12,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
-import { useContacts } from "../contexts/ContactsContext";
-import { useConversation } from "../contexts/ConversationContext";
+import { useContacts } from "../contexts/ContactsProvider";
+import { useConversation } from "../contexts/ConversationsProvider";
 
 function NewConversationDialog(props) {
   const { onClose, selectedValue, open } = props;
@@ -88,28 +88,33 @@ function NewConversationDialog(props) {
     >
       <DialogTitle id="simple-dialog-title">Cuộc trò chuyện mới</DialogTitle>
       <List dense className={classes.root}>
-        {contacts.map((contact, index) => {
-          const labelId = `checkbox-list-secondary-label-${index}`;
-          return (
-            <ListItem key={index} button>
-              <ListItemAvatar>
-                <Avatar
-                  alt={`Avatar n°${index + 1}`}
-                  src={`/static/images/avatar/${index + 1}.jpg`}
-                />
-              </ListItemAvatar>
-              <ListItemText id={labelId} primary={contact.username} />
-              <ListItemSecondaryAction>
-                <Checkbox
-                  edge="end"
-                  onChange={handleCheckBoxChange(contact._id, index)}
-                  checked={selectedContactIds.includes(contact._id)}
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
-        })}
+          {
+            contacts ?
+            contacts.map((contact, index) => {
+              const labelId = `checkbox-list-secondary-label-${index}`;
+              return (
+                <ListItem key={index} button>
+                  <ListItemAvatar>
+                    <Avatar
+                      alt={`Avatar n°${index + 1}`}
+                      src={`/static/images/avatar/${index + 1}.jpg`}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText id={labelId} primary={contact.email} />
+                  <ListItemSecondaryAction>
+                    <Checkbox
+                      edge="end"
+                      onChange={handleCheckBoxChange(contact._id, index)}
+                      checked={selectedContactIds.includes(contact._id)}
+                      inputProps={{ "aria-labelledby": labelId }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              );
+            })
+            :
+            <h4>No contact found...</h4>
+          }
         <ListItem
           className={classes.list__item}
           // autoFocus

@@ -1,28 +1,25 @@
-import React, { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthProvider";
 // Material-ui
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import Fade from "@material-ui/core/Fade";
+import { green } from "@material-ui/core/colors";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Collapse from "@material-ui/core/Collapse";
+import Alert from "@material-ui/lab/Alert";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-
-//call API
-// import { CheckLoginWithSessionCooki } from "../services/api";
 
 function Copyright() {
   return (
@@ -44,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: "relative",
+  },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
@@ -52,35 +53,44 @@ const useStyles = makeStyles((theme) => ({
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
-  submit: {
+  buttonSubmit: {
+    backgroundColor: green[500],
     margin: theme.spacing(3, 0, 2),
+    "&:hover": {
+      backgroundColor: green[700],
+    },
+  },
+  buttonProgress: {
+    color: green[500],
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12,
   },
 }));
 
 export default function SignIn() {
-  const { signin } = useAuth();
-  const history = useHistory();
+  const { Signin } = useAuth();
   const classes = useStyles();
-  // const { currentUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [severity, setSeverity] = useState("warning");
   const [error, setError] = useState("");
-  const [ShowAlertWhenEmailIsEmty, setShowAlertWhenEmailIsEmty] = useState(
-    false
-  );
-  const [
-    ShowAlertWhenPasswordIsEmty,
-    setShowAlertWhenPasswordIsEmty,
-  ] = useState(false);
+  const [ShowAlertWhenEmailIsEmty, setShowAlertWhenEmailIsEmty] =
+    useState(false);
+  const [ShowAlertWhenPasswordIsEmty, setShowAlertWhenPasswordIsEmty] =
+    useState(false);
   //
   const [loading, setLoading] = useState(false);
   //
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     if (email === "") {
       setError("");
       setSeverity("warning");
+      setLoading(false);
       setShowAlertWhenEmailIsEmty(true);
       return;
     } else {
@@ -88,76 +98,38 @@ export default function SignIn() {
     }
     if (password === "") {
       setError("");
+      setLoading(false);
       setShowAlertWhenPasswordIsEmty(true);
       return;
     } else {
       setShowAlertWhenPasswordIsEmty(false);
     }
-    setLoading(true);
-    signin(email, password)
-      .then((res) => {
-        setLoading(false);
-        history.push("/chat");
-      })
-      .catch((error) => {
-        setLoading(false);
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log("error.response.data ****", error.response.data);
-          setError(error.response.data.message);
-          setSeverity("error");
-          setShowAlertWhenEmailIsEmty(true);
-          // setError("");
-          // console.log("error.response.status ****", error.response.status);
-          // console.log("error.response.headers ****", error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log("error.request ****", error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
-        }
-        console.log("error.config **** ", error.config);
-      });
+    try {
+      await Signin(email, password);
+    } catch (error) {
+      setLoading(false);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log("error.response.data ****", error.response.data);
+        setError(error.response.data.message);
+        setSeverity("error");
+        setShowAlertWhenEmailIsEmty(true);
+        // setError("");
+        // console.log("error.response.status ****", error.response.status);
+        // console.log("error.response.headers ****", error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log("error.request ****", error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+      console.log("error.config **** ", error.config);
+    }
   }
-
-  // useEffect(() => {
-  //   getUserCredentialWithSessionCooki()
-  //     .then(() => {
-  //       history.push("/chat/me");
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
-
-  //
-  // useEffect(() => {
-  //   getUserCredentialWithSessionCooki()
-  //     .then((respone) => {
-  //       console.log(respone);
-  //     })
-  //     .catch((error) => {
-  //       if (error.response) {
-  //         console.log("error.response.data COOKIES****", error.response.data);
-  //         // setError("");
-  //         // console.log("error.response.status ****", error.response.status);
-  //         // console.log("error.response.headers ****", error.response.headers);
-  //       } else if (error.request) {
-  //         // The request was made but no response was received
-  //         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-  //         // http.ClientRequest in node.js
-  //         console.log("error.request COOKIES****", error.request);
-  //       } else {
-  //         // Something happened in setting up the request that triggered an Error
-  //         console.log("Error COOKIES", error.message);
-  //       }
-  //       console.log("error.config COOKIES**** ", error.config);
-  //     });
-  // }, []);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -167,7 +139,7 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Đăng nhập
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <TextField
@@ -243,37 +215,31 @@ export default function SignIn() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            {loading ? (
-              <Fade
-                in={loading}
-                style={{
-                  transitionDelay: loading ? "800ms" : "0ms",
-                }}
-                unmountOnExit
-              >
-                <CircularProgress />
-              </Fade>
-            ) : (
-              "SIGN IN"
+
+          <div className={classes.wrapper}>
+            <Button
+              variant="contained"
+              type="submit"
+              color="primary"
+              fullWidth
+              // className={buttonClassname}
+              disabled={loading}
+              onClick={handleSubmit}
+            >
+              Đăng Nhập
+            </Button>
+            {loading && (
+              <CircularProgress size={24} className={classes.buttonProgress} />
             )}
-          </Button>
+          </div>
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
-                Forgot password?
+                Quên mật khẩu
               </Link>
             </Grid>
             <Grid item>
-              <Link to="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <Link to="/signup">{"Bạn chưa có tài khoản? đăng kí"}</Link>
             </Grid>
           </Grid>
         </form>
