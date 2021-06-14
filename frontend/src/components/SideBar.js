@@ -37,14 +37,14 @@ function SideBar() {
       color: theme.palette.getContrastText(deepPurple[500]),
       backgroundColor: deepPurple[500],
     },
-    userNameText:{
-      color: 'black',
-    }
+    userNameText: {
+      color: "black",
+    },
   }));
 
-  const handleSearch = (e) =>{
+  const handleSearch = (e) => {
     e.preventDefault();
-  }
+  };
 
   const classes = useStyles();
 
@@ -57,22 +57,18 @@ function SideBar() {
               setIsShowDialog(true);
             }}
           >
-             <div className="active__icon">
-              <img
-                className="user__image"
-                src="https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png"
-              />
+            <div className="active__icon">
+              <Avatar className={classes.purple}>
+                <Typography variant="body2">
+                  {user.firstName.substring(0, 1) +
+                    "" +
+                    user.lastName.substring(0, 1)}
+                </Typography>
+              </Avatar>
               <div className="user__online__circle"></div>
             </div>
-            {/* <Avatar className={classes.purple}>
-              <Typography>
-                {user.firstName.substring(0, 1) +
-                  "" +
-                  user.lastName.substring(0, 1)}
-              </Typography>
-            </Avatar> */}
           </Button>
-          <Box p={1}  >
+          <Box>
             <Typography className={classes.userNameText} variant="body2">
               {user.firstName + " " + user.lastName}
             </Typography>
@@ -85,9 +81,6 @@ function SideBar() {
           onCloseDialog={onCloseDialog}
         />
         <div className="header__right">
-          <IconButton>
-            <SearchIcon />
-          </IconButton>
           <IconButton>
             <MoreVertIcon />
           </IconButton>

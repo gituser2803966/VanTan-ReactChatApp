@@ -12,7 +12,7 @@ export function ContactsProvider({ children }) {
   const {
     authState: { user },
   } = useAuth();
-  const [contacts, setContacts] = useState();
+  const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
     APIGetAllUser()

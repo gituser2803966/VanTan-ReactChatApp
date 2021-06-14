@@ -14,16 +14,17 @@ import NewConversationDialog from "./NewConversationDialog";
 import { useConversation } from "../contexts/ConversationsProvider";
 
 function Conversation() {
-  const { conversations, selectConversationIndex } = useConversation();
+  const { myConversations } = useConversation();
 
-  const [open, setOpen] = useState(false);
+  const [isOpenNewConversationModal, setIsOpenNewConversationModal] =
+    useState(false);
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleOpenModal = () => {
+    setIsOpenNewConversationModal(true);
   };
 
-  const handleClose = (value) => {
-    setOpen(false);
+  const handleCloseModal = () => {
+    setIsOpenNewConversationModal(false);
   };
 
   const useStyles = makeStyles((theme) => ({
@@ -60,9 +61,10 @@ function Conversation() {
   return (
     <div>
       <div className={classes.headerConversations}>
+        {/* show new conversation modal */}
         <NewConversationDialog
-          open={open}
-          onClose={handleClose}
+          open={isOpenNewConversationModal}
+          onClose={handleCloseModal}
         />
         <Typography>Cuộc trò chuyện</Typography>
         <Box component="div">
@@ -71,7 +73,7 @@ function Conversation() {
             className={classes.newConversationButton}
             // color="primary"
             startIcon={<AddIcon />}
-            onClick={handleOpen}
+            onClick={handleOpenModal}
           >
             New
           </Button>
@@ -79,7 +81,7 @@ function Conversation() {
       </div>
       <div>
         <List dense className={classes.root}>
-          {conversations.map((conversation, index) => {
+          {myConversations.map((conversation, index) => {
             const labelId = `checkbox-list-secondary-label-${index}`;
             return (
               <ListItem
@@ -90,26 +92,16 @@ function Conversation() {
                   selected: classes.selected,
                 }}
                 button
-                selected={conversation.selected}
+                // selected={conversation.selected}
                 onClick={() => {
-                  selectConversationIndex(index);
+                  // selectConversationIndex(index);
                 }}
               >
                 <ListItemAvatar>
-                  <Avatar
-                    alt={`Avatar n°${index + 1}`}
-                    src={`/static/images/avatar/${index + 1}.jpg`}
-                  />
+                  <Avatar>N</Avatar>
                 </ListItemAvatar>
-                <ListItemText
-                  id={labelId}
-                  primary={conversation.recipients
-                    .map((r) => r.username)
-                    .join(" ,")}
-                />
-                <ListItemSecondaryAction>
-                  time
-                </ListItemSecondaryAction>
+                <ListItemText id={labelId} primary={conversation.name} />
+                {/* <ListItemSecondaryAction>time</ListItemSecondaryAction> */}
               </ListItem>
             );
           })}

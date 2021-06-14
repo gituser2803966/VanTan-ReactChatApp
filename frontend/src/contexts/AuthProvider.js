@@ -19,10 +19,11 @@ export function AuthProvider({ children }) {
     isLoading: true,
     isAuthenticated: false,
     user: null,
+    conversations: [],
   });
 
-  async function Signup(userData){
-    const responese = await APISignup(userData)
+  async function Signup(userData) {
+    const responese = await APISignup(userData);
     if (responese.data.success) {
       dispatch({
         type: "LOGIN",
@@ -39,6 +40,7 @@ export function AuthProvider({ children }) {
       dispatch({
         type: "LOGIN",
         user: responese.data.user,
+        conversations: responese.data.conversations,
       });
     } else {
       return responese;
@@ -58,14 +60,15 @@ export function AuthProvider({ children }) {
 
   const checkUserLoggedIn = async () => {
     try {
-      const result = await APIAuthenticationWithSessionCookie();
-      if (result.data.logged) {
+      const responese = await APIAuthenticationWithSessionCookie();
+      if (responese.data.logged) {
         //user logged
         dispatch({
           type: "REFRESH",
-          user: result.data.user,
+          user: responese.data.user,
+          conversations: responese.data.conversations,
         });
-        <Redirect to="/chat" />
+        <Redirect to="/chat" />;
       }
     } catch (error) {
       dispatch({
@@ -79,7 +82,7 @@ export function AuthProvider({ children }) {
     checkUserLoggedIn();
   }, []);
 
-  const value = { authState:authState, Signin, Signup,Signout };
+  const value = { authState, Signin, Signup, Signout };
 
   return <Authcontext.Provider value={value}>{children}</Authcontext.Provider>;
 }

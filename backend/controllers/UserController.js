@@ -1,7 +1,8 @@
-import User from "../models/user.model.js";
+import UserModel from "../models/user.model.js";
 import * as dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import { generateToken } from "../helper/jwt.helper.js";
+import { GetAllConversationForTheCurrentUser } from "./ConversationController.js";
 
 dotenv.config();
 
@@ -24,31 +25,35 @@ const refreshTokenSecret =
 // }
 
 //get all user
-export const GetAllUser = (req,res) =>{
-  User.find({},(error,docs)=>{
-    if(error){
+export const GetAllUser = (req, res) => {
+  UserModel.find({}, (error, docs) => {
+    if (error) {
       return res.status(404).send({
         error,
         success: false,
-        message: 'NOT FOUND DOC'
-      })
-    }else{
+        message: "NOT FOUND DOC",
+      });
+    } else {
       return res.status(200).send({
         users: docs,
-        success:true,
-        message: 'OK',
-      })
+        success: true,
+        message: "OK",
+      });
     }
-  })
-}
+  });
+};
 
 // check loggedIn with session cooki
-export const LoginWithSessionCookie = (req, res) => {
+export const LoginWithSessionCookie = async (req, res) => {
   if (req.session.user) {
+    const conversations = await GetAllConversationForTheCurrentUser(
+      req.session.user._id
+    );
     return res.status(200).json({
       logged: true,
       message: "đã đăng nhập rồi",
       user: req.session.user,
+      conversations,
     });
   } else {
     return res.status(400).json({
@@ -63,7 +68,7 @@ export const Login = async (req, res) => {
   try {
     const { email, password } = req.body;
     // console.log("co REQUEST TOI ...");
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
 
     if (!user) {
       // email không đúng
@@ -102,12 +107,15 @@ export const Login = async (req, res) => {
 
     // lưu thông tin cookie vào tab trên browser
     req.session.user = user;
+    // lấy ra tất cả các cuộc trò chuyện của user nếu có
+    const conversations = await GetAllConversationForTheCurrentUser(user._id);
     return res.status(200).json({
       logged: true,
       accessToken,
       refreshToken,
       user,
       message: "you are logged",
+      conversations,
     });
   } catch (error) {
     return res.status(500).json(error);
@@ -138,7 +146,7 @@ export const Register = (req, res) => {
     email: email,
     password: password,
   };
-  User.findOne({ email }, (error, userDoc) => {
+  UserModel.findOne({ email }, (error, userDoc) => {
     if (userDoc) {
       return res.status(400).send({
         message: "Email đã tồn tại",
@@ -146,14 +154,15 @@ export const Register = (req, res) => {
         error,
       });
     } else {
-      const user = new User(userData);
+      const user = new UserModel(userData);
       user.save((err, doc) => {
         if (err) {
           console.log("err ****** :", err);
           return res.status(400).send({
-            success: false, message: "Email không hợp lệ",
-            error:err,
-          })
+            success: false,
+            message: "Email không hợp lệ",
+            error: err,
+          });
         } else {
           req.session.user = doc;
           // const token = await user.generateAuthToken();

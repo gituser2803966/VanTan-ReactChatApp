@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let BASE_URL = "http://localhost:5000/api/user";
+let BASE_URL = "http://localhost:5000/api";
 
 axios.defaults.withCredentials = true;
 
@@ -16,26 +16,30 @@ axios.defaults.withCredentials = true;
 
 // get all user
 export async function APIGetAllUser() {
-  return await axios.get(BASE_URL + "/all");
+  return await axios.get(BASE_URL + "/user/all");
 }
 // check user logged in with session cookie
 export async function APIAuthenticationWithSessionCookie() {
-  return await axios.get(BASE_URL + "/login");
+  return await axios.get(BASE_URL + "/user/login");
 }
 //signout
 export async function APISignout() {
-  return await axios.get(BASE_URL + "/logout");
+  return await axios.get(BASE_URL + "/user/logout");
 }
 
 // register
 export async function APISignup(userData) {
-  return await axios.post(BASE_URL + "/register", userData);
+  return await axios.post(BASE_URL + "/user/register", userData, {
+    headers: {
+      "content-type": "application/json",
+    },
+  });
 }
 
 // login with email and password
 export async function APILoginWithEmailAndPassword(email, password) {
   return await axios.post(
-    BASE_URL + "/login",
+    BASE_URL + "/user/login",
     {
       email,
       password,
@@ -46,6 +50,20 @@ export async function APILoginWithEmailAndPassword(email, password) {
       },
     }
   );
+}
+
+// create new conversation
+export async function APICreateConversation(conversationData) {
+  return await axios.post(BASE_URL + "/conversation/new", conversationData, {
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+}
+
+// get all conversation
+export async function APIGetAllConversationForTheCurrentUser() {
+  return await axios.get(BASE_URL + "/conversation/all");
 }
 
 // upload file

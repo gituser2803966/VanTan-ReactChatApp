@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthProvider";
-import { useSocket } from '../contexts/SocketProvider';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { useSocket } from "../contexts/SocketProvider";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { Avatar, IconButton } from "@material-ui/core";
 // material-ui
 import { withStyles } from "@material-ui/core/styles";
@@ -32,13 +32,13 @@ export default function SideBarSettingModal({ onCloseDialog, isShowDialog }) {
     authState: { user },
     Signout,
   } = useAuth();
-  const socket  = useSocket();
+  const socket = useSocket();
   const [checked, setChecked] = useState(["wifi"]);
   const [openBackdrop, setOpenBackdrop] = useState(false);
 
   const handleLogout = async () => {
     setOpenBackdrop(true);
-    socket.emit("user logout",{user})
+    socket.emit("user logout", { user });
     await Signout();
   };
 
@@ -62,7 +62,7 @@ export default function SideBarSettingModal({ onCloseDialog, isShowDialog }) {
     },
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
-      color: '#fff',
+      color: "#fff",
     },
     input: {
       display: "none",
